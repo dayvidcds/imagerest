@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  app:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    environment:
+      PORT: ${PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_URI: ${DATABASE_URI}
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+    networks:
+      - node-network
+
+  database:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASS}
+    volumes:
+      - ./data:/var/lib/mongodb/data
+    ports:
+      - '27017:27017'
+    networks:
+      - node-network
+
+  production:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - '80:${PORT}'
+    restart: unless-stopped
+
+networks:
+  node-network:
+    driver: bridge

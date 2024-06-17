@@ -1,0 +1,17 @@
+FROM node:lts-alpine
+
+WORKDIR /app
+
+COPY tsconfig*.json ./
+COPY package.json ./
+COPY .env ./
+COPY src/ src/
+COPY mikro-orm.config.ts ./
+COPY yarn.lock ./
+
+RUN yarn
+RUN yarn build
+
+EXPOSE 3000
+
+CMD ["yarn", "start"]

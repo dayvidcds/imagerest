@@ -1,0 +1,11 @@
+FROM node:lts-alpine
+
+RUN apk add --no-cache git zsh
+
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+SHELL ["/bin/zsh"]
+
+WORKDIR /app
+
+CMD ["tail", "-f", "/dev/null"]
