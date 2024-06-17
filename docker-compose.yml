@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile.local
     environment:
       PORT: ${PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      EXPIRES_IN: ${EXPIRES_IN}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
