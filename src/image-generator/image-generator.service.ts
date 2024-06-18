@@ -5,6 +5,7 @@ import Jimp from 'jimp';
 export class ImageGeneratorService {
   public async generateImage(
     image: string | Buffer,
+    format: string,
     width?: number,
     height?: number,
     quality?: number,
@@ -42,11 +43,24 @@ export class ImageGeneratorService {
         jimpImage.quality(quality);
       }
 
-      const buffer = await jimpImage.getBufferAsync(Jimp.MIME_JPEG);
+      const formatMap = {
+        jpeg: Jimp.MIME_JPEG,
+        jpg: Jimp.MIME_JPEG,
+        png: Jimp.MIME_PNG,
+        webp: Jimp.MIME_BMP,
+      };
+
+      if (!formatMap[format.toLowerCase()]) {
+        throw new Error('Unsupported image format. Use jpeg, png or webp');
+      }
+
+      const mime = formatMap[format.toLowerCase()];
+
+      const buffer = await jimpImage.getBufferAsync(mime);
 
       return buffer;
     } catch (error) {
-      console.error('Erro ao processar imagem:', error);
+      console.error('Error processing image', error);
       return null;
     }
   }

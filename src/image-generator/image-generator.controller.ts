@@ -1,3 +1,4 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   Controller,
   Get,
@@ -6,14 +7,12 @@ import {
   Param,
   Query,
   Res,
-  UseInterceptors,
 } from '@nestjs/common';
-import { ImageGeneratorService } from './image-generator.service';
-import { Response } from 'express';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { join } from 'path';
+import { Response } from 'express';
 import { existsSync } from 'fs';
+import { join } from 'path';
+import { ImageGeneratorService } from './image-generator.service';
 
 @Controller('image-generator')
 export class ImageGeneratorController {
@@ -29,26 +28,38 @@ export class ImageGeneratorController {
     @Query('height') height: string,
     @Query('quality') quality: string,
     @Query('greyscale') greyscale: string,
+    @Query('format') format: string,
     @Res() res: Response,
   ) {
-    const widthNumber = width ? parseInt(width, 10) : undefined;
-    const heightNumber = height ? parseInt(height, 10) : undefined;
-    const qualityNumber = quality ? parseInt(quality, 10) : 85;
-    const greyscaleBool = greyscale === 'true';
+    const allowedFormats = ['jpg', 'jpeg', 'png', 'webp'];
 
-    const cacheKey = `image-${image}-${width}-${height}-${quality}-${greyscale}`;
+    let finalFormat = format;
+
+    if (format && !allowedFormats.includes(format.toLowerCase())) {
+      throw new NotFoundException(
+        'Unsupported image format. Use jpg, png or webp',
+      );
+    }
+
+    const pWidth = width ? parseInt(width, 10) : undefined;
+    const pHeight = height ? parseInt(height, 10) : undefined;
+    const pQuality = quality ? parseInt(quality, 10) : 85;
+    const pGreyscale = greyscale === 'true';
+
+    const [fileName, fileType] = image.split('.');
+    const fileBaseName = fileName.split('_')[0];
+    const originalFormat = fileType.toLowerCase();
+
+    const cacheKey = `image-${image}-${width}-${height}-${quality}-${greyscale}-${finalFormat || originalFormat}`;
 
     const cachedData = await this.cacheManager.get(cacheKey);
     if (cachedData) {
-      res.setHeader('Content-Type', 'image/jpeg');
+      res.setHeader('Content-Type', `image/${finalFormat || originalFormat}`);
       res.send(cachedData);
       return;
     }
 
     try {
-      const [fileName, fileType] = image.split('.');
-      const fileBaseName = fileName.split('_')[0];
-
       const projectRoot = join(__dirname, '..', '..');
       const basePath = join(
         projectRoot,
@@ -57,29 +68,31 @@ export class ImageGeneratorController {
       );
 
       if (!existsSync(basePath)) {
-        return null;
+        throw new NotFoundException();
       }
 
       const buffer = await this.imageGeneratorService.generateImage(
         basePath,
-        widthNumber,
-        heightNumber,
-        qualityNumber,
-        greyscaleBool,
+        finalFormat,
+        pWidth,
+        pHeight,
+        pQuality,
+        pGreyscale,
       );
 
       if (!buffer) {
         throw new NotFoundException();
       }
+
       await this.cacheManager.set(cacheKey, buffer);
 
-      res.setHeader('Content-Type', 'image/jpeg');
+      res.setHeader('Content-Type', `image/${finalFormat || originalFormat}`);
       res.send(buffer);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException('Imagem não encontrada');
+        throw new NotFoundException('Image not found');
       } else {
-        throw new Error('Erro ao processar imagem');
+        throw new Error('Error processing image');
       }
     }
   }
