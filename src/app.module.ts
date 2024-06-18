@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { ImageGeneratorService } from './image-generator/image-generator.service';
 import { ImageGeneratorController } from './image-generator/image-generator.controller';
 import { ImageGeneratorModule } from './image-generator/image-generator.module';
+import { ImageGeneratorService } from './image-generator/image-generator.service';
+import { UserModule } from './users/users.module';
 
 @Module({
   imports: [

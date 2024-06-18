@@ -24,11 +24,11 @@ export class ImageGeneratorController {
   @Get('images/:image')
   public async getImage(
     @Param('image') image: string,
-    @Query('width') width: string,
-    @Query('height') height: string,
-    @Query('quality') quality: string,
-    @Query('greyscale') greyscale: string,
-    @Query('format') format: string,
+    @Query('q') quality: string,
+    @Query('fm') format: string,
+    @Query('w') width: string,
+    @Query('h') height: string,
+    @Query('gray') greyscale: string,
     @Res() res: Response,
   ) {
     const allowedFormats = ['jpg', 'jpeg', 'png', 'webp'];
@@ -43,8 +43,10 @@ export class ImageGeneratorController {
 
     const pWidth = width ? parseInt(width, 10) : undefined;
     const pHeight = height ? parseInt(height, 10) : undefined;
-    const pQuality = quality ? parseInt(quality, 10) : 85;
-    const pGreyscale = greyscale === 'true';
+    const pQuality = quality
+      ? parseInt(quality, 10)
+      : parseInt(process.env.DEFAULT_IMAGE_QUALITY, 10);
+    const pGreyscale = greyscale === '0';
 
     const [fileName, fileType] = image.split('.');
     const fileBaseName = fileName.split('_')[0];
@@ -54,7 +56,7 @@ export class ImageGeneratorController {
 
     const cachedData = await this.cacheManager.get(cacheKey);
     if (cachedData) {
-      res.setHeader('Content-Type', `image/${finalFormat || originalFormat}`);
+      res.setHeader('Content-Type', `image/${finalFormat ?? originalFormat}`);
       res.send(cachedData);
       return;
     }
@@ -86,7 +88,7 @@ export class ImageGeneratorController {
 
       await this.cacheManager.set(cacheKey, buffer);
 
-      res.setHeader('Content-Type', `image/${finalFormat || originalFormat}`);
+      res.setHeader('Content-Type', `image/${finalFormat ?? originalFormat}`);
       res.send(buffer);
     } catch (error) {
       if (error instanceof NotFoundException) {
