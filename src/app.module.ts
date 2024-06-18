@@ -5,8 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './users/users.module';
-import { PictureModule } from './picture/picture.module';
 import { AuthModule } from './auth/auth.module';
+import { ImageGeneratorService } from './image-generator/image-generator.service';
+import { ImageGeneratorController } from './image-generator/image-generator.controller';
+import { ImageGeneratorModule } from './image-generator/image-generator.module';
 
 @Module({
   imports: [
@@ -19,11 +21,12 @@ import { AuthModule } from './auth/auth.module';
         password: process.env.DATABASE_PASS,
       },
     }),
-    PictureModule,
     UserModule,
     AuthModule,
+    ImageGeneratorModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, ImageGeneratorController],
+  providers: [AppService, ImageGeneratorService],
 })
+
 export class AppModule {}
