@@ -13,8 +13,7 @@ export class AuthService {
   async validateUser(username: string, email: string): Promise<any> {
     const user = await this.usersService.getByName(username);
     if (user && user.email === email) {
-      const { email, ...result } = user;
-      return result;
+      return user;
     }
     throw new UnauthorizedException('User not found')
   }
