@@ -13,6 +13,8 @@ import { Response } from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { ImageGeneratorService } from './image-generator.service';
+import { TypeAcceptedFormat } from 'types/global.types';
+import { FormatEnum } from 'sharp';
 
 @Controller('image-generator')
 export class ImageGeneratorController {
@@ -25,17 +27,22 @@ export class ImageGeneratorController {
   public async getImage(
     @Param('image') image: string,
     @Query('q') quality: string,
-    @Query('fm') format: string,
+    @Query('fm') format: TypeAcceptedFormat,
     @Query('w') width: string,
     @Query('h') height: string,
     @Query('gray') greyscale: string,
     @Res() res: Response,
   ) {
-    const allowedFormats = ['jpg', 'jpeg', 'png', 'webp'];
+    const allowedFormats: Array<TypeAcceptedFormat> = [
+      'jpg',
+      'jpeg',
+      'png',
+      'webp',
+    ];
 
-    let finalFormat = format;
+    let finalFormat: keyof FormatEnum = format ?? 'jpg';
 
-    if (format && !allowedFormats.includes(format.toLowerCase())) {
+    if (format && !allowedFormats.includes(format)) {
       throw new NotFoundException(
         'Unsupported image format. Use jpg, png or webp',
       );
@@ -62,7 +69,7 @@ export class ImageGeneratorController {
     }
 
     try {
-      const projectRoot = join(__dirname, '..', '..');
+      const projectRoot = join(__dirname, '..', '..', '..');
       const basePath = join(
         projectRoot,
         'assets',
@@ -91,6 +98,7 @@ export class ImageGeneratorController {
       res.setHeader('Content-Type', `image/${finalFormat ?? originalFormat}`);
       res.send(buffer);
     } catch (error) {
+      console.error(error);
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Image not found');
       } else {

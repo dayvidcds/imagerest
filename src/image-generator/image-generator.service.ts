@@ -1,62 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import Jimp from 'jimp';
+import { FormatEnum } from 'sharp';
+const sharp = require('sharp');
 
 @Injectable()
 export class ImageGeneratorService {
   public async generateImage(
     image: string | Buffer,
-    format: string,
+    format: keyof FormatEnum,
     width?: number,
     height?: number,
     quality?: number,
     greyscale?: boolean,
   ): Promise<Buffer | null> {
     try {
-      const jimpImage = await Jimp.read(image.toString());
+      const sharpImage = sharp(image);
 
-      const originalWidth = jimpImage.getWidth();
-      const originalHeight = jimpImage.getHeight();
+      const metadata = await sharpImage.metadata();
 
-      let maxWidth = width ?? Jimp.AUTO;
-      let maxHeight = height ?? Jimp.AUTO;
+      const originalWidth = metadata.width ?? 0;
+      const originalHeight = metadata.height ?? 0;
 
+      const maxWidth = width ?? originalWidth;
+      const maxHeight = height ?? originalHeight;
       const limiteMaximo = 2000;
-      if (width && width < originalWidth) {
-        maxWidth = width;
-      } else if (originalWidth > limiteMaximo) {
-        maxWidth = limiteMaximo;
-      }
 
-      if (height && height < originalHeight) {
-        maxHeight = height;
-      } else if (originalHeight > limiteMaximo) {
-        maxHeight = limiteMaximo;
-      }
+      const finalWidth =
+        maxWidth && maxWidth < originalWidth
+          ? maxWidth
+          : Math.min(originalWidth, limiteMaximo);
+      const finalHeight =
+        maxHeight && maxHeight < originalHeight
+          ? maxHeight
+          : Math.min(originalHeight, limiteMaximo);
 
-      jimpImage.resize(maxWidth, maxHeight);
+      let processedImage = sharpImage.resize(finalWidth, finalHeight);
 
       if (greyscale) {
-        jimpImage.greyscale();
+        processedImage = processedImage.greyscale();
       }
 
       if (quality) {
-        jimpImage.quality(quality);
+        processedImage = processedImage.toFormat(format, { quality });
+      } else {
+        processedImage = processedImage.toFormat(format);
       }
 
-      const formatMap = {
-        jpeg: Jimp.MIME_JPEG,
-        jpg: Jimp.MIME_JPEG,
-        png: Jimp.MIME_PNG,
-        webp: Jimp.MIME_BMP,
-      };
-
-      if (!formatMap[format.toLowerCase()]) {
-        throw new Error('Unsupported image format. Use jpeg, png or webp');
-      }
-
-      const mime = formatMap[format.toLowerCase()];
-
-      const buffer = await jimpImage.getBufferAsync(mime);
+      const buffer = await processedImage.toBuffer();
 
       return buffer;
     } catch (error) {
