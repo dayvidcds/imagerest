@@ -1,5 +1,5 @@
 services:
-  app:
+  app_dev:
     container_name: backend
     build:
       context: .
@@ -8,7 +8,6 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - database
-      - cache
     volumes:
       - .:/app
     networks:
@@ -28,18 +27,6 @@ services:
     networks:
       - node-network
 
-  cache:
-    image: redis:6.2-alpine
-    restart: always
-    ports:
-      - '6379:6379'
-    environment:
-      REDIS_PASSWORD: ${REDIS_PASS}
-      REDIS_PORT: 6379
-      REDIS_DATABASES: 16
-    volumes:
-      - cache:/data
-
   production:
     container_name: app
     build:
@@ -48,10 +35,6 @@ services:
     ports:
       - '80:${PORT}'
     restart: unless-stopped
-
-volumes:
-  cache:
-    driver: local
 
 networks:
   node-network:

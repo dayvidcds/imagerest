@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nest build",
-    "docker:local": "( trap 'docker compose down app database' EXIT && docker compose up app database --build -d && ( docker exec -it backend zsh || true ) )",
+    "docker:local": "( trap 'docker compose down app_dev database' EXIT && docker compose up app_dev database --build -d && ( docker exec -it backend zsh || true ) )",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
