@@ -37,5 +37,5 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: weedo-test
         run: |
-          git remote add heroku https://git.heroku.com/weedo-test.git
+          git remote add heroku git@heroku.com:weedo-test.git
           git push heroku HEAD:refs/heads/master
