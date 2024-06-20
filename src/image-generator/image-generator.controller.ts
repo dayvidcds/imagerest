@@ -74,11 +74,11 @@ export class ImageGeneratorController {
       const bucketName = process.env.AWS_BUCKET_NAME;
       const key = `${fileBaseName}.${fileType}`;
 
-      //const s3Object = await this.awsS3Service.getObject(bucketName, key);
-      const imagePath = await this.localStrategyService.getImageLocation(key);
+      const s3Object = await this.awsS3Service.getObject(bucketName, key);
+      //const imagePath = await this.localStrategyService.getImageLocation(key);
 
       const buffer = await this.imageGeneratorService.generateImage(
-        imagePath,
+        s3Object.Body,
         finalFormat,
         pWidth,
         pHeight,

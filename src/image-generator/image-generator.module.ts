@@ -6,7 +6,12 @@ import { ImageGeneratorService } from './image-generator.service';
 import { LocalStrategy } from 'src/local-strategy/local-strategy.service';
 
 @Module({
-  imports: [CacheModule.register({ isGlobal: true, ttl: 60000 })],
+  imports: [
+    CacheModule.register({
+      isGlobal: true,
+      ttl: parseInt(process.env.CACHE_TTL, 10),
+    }),
+  ],
   controllers: [ImageGeneratorController],
   providers: [ImageGeneratorService, AwsS3Service, LocalStrategy],
   exports: [AwsS3Service, LocalStrategy],

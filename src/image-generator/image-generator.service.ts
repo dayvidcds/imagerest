@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { Body } from 'aws-sdk/clients/s3';
 import { FormatEnum } from 'sharp';
 const sharp = require('sharp');
 
 @Injectable()
 export class ImageGeneratorService {
   public async generateImage(
-    image: string | Buffer,
+    image: Body,
     format: keyof FormatEnum,
     width?: number,
     height?: number,
