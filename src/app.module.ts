@@ -9,7 +9,6 @@ import { ImageGeneratorController } from './image-generator/image-generator.cont
 import { ImageGeneratorModule } from './image-generator/image-generator.module';
 import { ImageGeneratorService } from './image-generator/image-generator.service';
 import { UserModule } from './users/users.module';
-import { AwsS3Module } from './aws-s3/aws-s3.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { AwsS3Module } from './aws-s3/aws-s3.module';
     UserModule,
     AuthModule,
     ImageGeneratorModule,
-    AwsS3Module,
   ],
   controllers: [AppController, ImageGeneratorController],
   providers: [AppService, ImageGeneratorService],
