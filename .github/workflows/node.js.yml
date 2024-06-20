@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Nodejs CI and Heroku CD
 run-name: ${{ github.actor }} is testing her backend
 
 on:
@@ -18,7 +15,6 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v4
@@ -33,3 +29,13 @@ jobs:
         run: yarn add sharp --ignore-engines
       - name: Run tests
         run: yarn test
+
+      # Deploy to Heroku if tests pass
+      - name: Deploy to Heroku
+        if: success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: weedo-test
+        run: |
+          git remote add heroku https://git.heroku.com/weedo-test.git
+          git push heroku HEAD:refs/heads/master
