@@ -10,17 +10,19 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
-import { existsSync } from 'fs';
-import { join } from 'path';
-import { ImageGeneratorService } from './image-generator.service';
-import { TypeAcceptedFormat } from 'types/global.types';
 import { FormatEnum } from 'sharp';
+import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
+import { TypeAcceptedFormat } from 'src/types/global.types';
+import { ImageGeneratorService } from './image-generator.service';
+import { LocalStrategy } from 'src/local-strategy/local-strategy.service';
 
 @Controller('image-generator')
 export class ImageGeneratorController {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly imageGeneratorService: ImageGeneratorService,
+    private readonly awsS3Service: AwsS3Service,
+    private readonly localStrategyService: LocalStrategy,
   ) {}
 
   @Get('images/:image')
@@ -40,7 +42,7 @@ export class ImageGeneratorController {
       'webp',
     ];
 
-    let finalFormat: keyof FormatEnum = format ?? 'jpg';
+    const finalFormat: keyof FormatEnum = format ?? 'jpg';
 
     if (format && !allowedFormats.includes(format)) {
       throw new NotFoundException(
@@ -53,7 +55,7 @@ export class ImageGeneratorController {
     const pQuality = quality
       ? parseInt(quality, 10)
       : parseInt(process.env.DEFAULT_IMAGE_QUALITY, 10);
-    const pGreyscale = greyscale === '0';
+    const pGreyscale = greyscale === '1';
 
     const [fileName, fileType] = image.split('.');
     const fileBaseName = fileName.split('_')[0];
@@ -69,19 +71,14 @@ export class ImageGeneratorController {
     }
 
     try {
-      const projectRoot = join(__dirname, '..', '..', '..');
-      const basePath = join(
-        projectRoot,
-        'assets',
-        `${fileBaseName}.${fileType}`,
-      );
+      const bucketName = process.env.AWS_BUCKET_NAME;
+      const key = `${fileBaseName}.${fileType}`;
 
-      if (!existsSync(basePath)) {
-        throw new NotFoundException();
-      }
+      //const s3Object = await this.awsS3Service.getObject(bucketName, key);
+      const imagePath = await this.localStrategyService.getImageLocation(key);
 
       const buffer = await this.imageGeneratorService.generateImage(
-        basePath,
+        imagePath,
         finalFormat,
         pWidth,
         pHeight,

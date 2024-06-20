@@ -4,15 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.local
-    environment:
-      PORT: ${PORT}
-      JWT_SECRET: ${JWT_SECRET}
-      EXPIRES_IN: ${EXPIRES_IN}
-      DEFAULT_IMAGE_QUALITY: ${DEFAULT_IMAGE_QUALITY}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASS: ${DATABASE_PASS}
-      DATABASE_URI: ${DATABASE_URI}
     ports:
       - ${PORT}:${PORT}
     depends_on:

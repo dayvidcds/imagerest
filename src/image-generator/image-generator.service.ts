@@ -16,22 +16,22 @@ export class ImageGeneratorService {
       const sharpImage = sharp(image);
 
       const metadata = await sharpImage.metadata();
-
       const originalWidth = metadata.width ?? 0;
       const originalHeight = metadata.height ?? 0;
 
-      const maxWidth = width ?? originalWidth;
-      const maxHeight = height ?? originalHeight;
-      const limiteMaximo = 2000;
+      let finalWidth = width ?? originalWidth;
+      let finalHeight = height ?? originalHeight;
 
-      const finalWidth =
-        maxWidth && maxWidth < originalWidth
-          ? maxWidth
-          : Math.min(originalWidth, limiteMaximo);
-      const finalHeight =
-        maxHeight && maxHeight < originalHeight
-          ? maxHeight
-          : Math.min(originalHeight, limiteMaximo);
+      const maxLimit = Math.max(originalWidth, originalHeight);
+
+      if (!width && height) {
+        finalWidth = Math.round((height / originalHeight) * originalWidth);
+      } else if (width && !height) {
+        finalHeight = Math.round((width / originalWidth) * originalHeight);
+      }
+
+      finalWidth = Math.min(finalWidth, maxLimit);
+      finalHeight = Math.min(finalHeight, maxLimit);
 
       let processedImage = sharpImage.resize(finalWidth, finalHeight);
 
@@ -49,7 +49,6 @@ export class ImageGeneratorService {
 
       return buffer;
     } catch (error) {
-      console.error('Error processing image', error);
       return null;
     }
   }
