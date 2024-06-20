@@ -1,20 +1,20 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
-  Controller,
-  Get,
-  Inject,
-  NotFoundException,
-  Param,
-  Query,
-  Res,
+Controller,
+Get,
+Inject,
+NotFoundException,
+Param,
+Query,
+Res,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
 import { FormatEnum } from 'sharp';
-import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
+import { LocalStrategy } from '../local-strategy/local-strategy.service';
 import { TypeAcceptedFormat } from 'src/types/global.types';
+import { AwsS3Service } from '../aws-s3/aws-s3.service';
 import { ImageGeneratorService } from './image-generator.service';
-import { LocalStrategy } from 'src/local-strategy/local-strategy.service';
 
 @Controller('image-generator')
 export class ImageGeneratorController {
