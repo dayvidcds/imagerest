@@ -29,13 +29,13 @@ jobs:
         run: yarn add sharp --ignore-engines
       - name: Run tests
         run: yarn test
-
-      # Deploy to Heroku if tests pass
-      - name: Deploy to Heroku
-        if: success()
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: weedo-test
-        run: |
-          git remote add heroku https://git.heroku.com/weedo-test.git
-          git push heroku HEAD:refs/heads/master
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "weedo-test"
+          heroku_email: "dayvid.clementino@gmail.com"
