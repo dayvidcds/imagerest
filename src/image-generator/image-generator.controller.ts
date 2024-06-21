@@ -18,9 +18,9 @@ import { Cache } from 'cache-manager';
 import { Response } from 'express';
 import * as multer from 'multer';
 import { FormatEnum } from 'sharp';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { UserId } from 'src/decorators/user-id.decorator';
-import { TypeAcceptedFormat } from 'src/types/global.types';
+import { JwtAuthGuard } from '../auth/auth.guard';
+import { UserId } from '../decorators/user-id.decorator';
+import { TypeAcceptedFormat } from '../types/global.types';
 import { AwsS3Service } from '../aws-s3/aws-s3.service';
 import { LocalStrategy } from '../local-strategy/local-strategy.service';
 import { ImageGeneratorService } from './image-generator.service';
@@ -56,8 +56,6 @@ export class ImageGeneratorController {
     ];
 
     const finalFormat: keyof FormatEnum = format ?? 'jpg';
-
-    console.log(userId);
 
     if (format && !allowedFormats.includes(format)) {
       throw new NotFoundException(
@@ -109,7 +107,6 @@ export class ImageGeneratorController {
       res.setHeader('Content-Type', `image/${finalFormat ?? originalFormat}`);
       res.send(buffer);
     } catch (error) {
-      console.error(error);
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Image not found');
       } else {
