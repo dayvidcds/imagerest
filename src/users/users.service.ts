@@ -19,12 +19,8 @@ export class UsersService {
     return await this.userModel.findOne({ name }).exec();
   }
 
-  async create(user: { name: string; email: string }) {
+  async create(user: { name: string }) {
     const newUser = new this.userModel(user);
     return await newUser.save();
-  }
-
-  getHello(): string {
-    return 'Hello World!';
   }
 }

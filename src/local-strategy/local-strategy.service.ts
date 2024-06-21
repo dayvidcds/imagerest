@@ -1,4 +1,3 @@
-// aws-s3.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { existsSync } from 'fs';
 import { join } from 'path';
