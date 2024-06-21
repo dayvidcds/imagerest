@@ -1,30 +1,17 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+<p align="center" style="display: flex;  align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="80" alt="Nest Logo" /></a>
+  <a href="https://www.mongodb.com/" target="blank"><img src="https://webassets.mongodb.com/_com_assets/cms/mongodb_logo1-76twgcu2dm.png" width="120" alt="MongoDB Logo" /></a>
+  <a href="https://aws.amazon.com/s3/" target="blank"><img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" width="100" alt="Amazon S3 Logo" /></a>
+  <a href="https://www.docker.com/" target="blank"><img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="80" alt="Docker Logo" /></a>
+  <a href="https://docs.docker.com/compose/" target="blank"><img src="https://media.wiki-power.com/img/20210117130925.jpg" width="140" alt="Docker Compose Logo" /></a>
+  <a href="https://www.heroku.com/" target="blank"><img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" width="60" alt="Heroku Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<p align="center">Some of the technologies and services used in this project.</p>
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Image management system that uses [Nest Js](https://github.com/nestjs/nest) in the backend to create a modular and easily scalable system. User information and photo data are stored in [MongoDB](https://www.mongodb.com/), while photos are saved in the cloud via [Amazon S3](https://aws.amazon.com/pt/s3/). The system implements a caching mechanism to avoid unnecessary calls to the storage service, reducing costs and significantly improving performance in delivering requested images. The deployment and orchestration are handled using [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/), making it easy to set up the development environment and manage containers. For deployment, [Heroku](https://www.heroku.com/) is used to provide a reliable and scalable cloud platform.
 
 ## Installation
 
@@ -35,6 +22,8 @@ $ yarn install
 ## Running the app
 
 ```bash
+# Important - Configure the .env file
+
 # development
 $ yarn run start
 
@@ -42,7 +31,25 @@ $ yarn run start
 $ yarn run start:dev
 
 # production mode
+$ yarn run build
 $ yarn run start:prod
+```
+
+## Running the app in Docker
+
+```bash
+# Important - Configure the .env file
+
+# development opening bash from docker container
+$ yarn run docker:local
+
+Inside docker >> $ yarn run start:dev
+
+# development using docker compose
+$ docker compose up
+
+# production mode
+$ docker compose up app
 ```
 
 ## Test
@@ -51,22 +58,22 @@ $ yarn run start:prod
 # unit tests
 $ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
-
 # test coverage
 $ yarn run test:cov
 ```
 
-## Support
+## Future improvements
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Added redis to persist the cache
+- Addition of a messaging service to control the entry of images for upload.
+- Study of automatic deployment on Amazon EC2
+- Development of more backend features (Image deletion, thumbnail image, multiple upload...)
+- Development of a frontend for the project
+- Distribution of the service/modules following the architecture proposed in the future architecture document that is attached to the project.
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Dayvid Silva](https://github.com/dayvidcds)
 
 ## License
 

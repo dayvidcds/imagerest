@@ -10,7 +10,7 @@
     "docker:local": "( trap 'docker compose down app_dev database' EXIT && docker compose up app_dev database --build -d && ( docker exec -it backend zsh || true ) )",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
