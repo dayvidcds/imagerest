@@ -63,6 +63,22 @@ $ yarn run test
 $ yarn run test:cov
 ```
 
+# test coverage
+
+$ yarn run test:cov
+
+```
+
+## API Test
+
+##### Import the insomnia.json file
+- Create a user or login user to generate jwt token
+- Upload the image to created user
+- List user images
+- Get image passing parameters
+
+
+
 ## Future improvements
 
 - Added redis to persist the cache
@@ -70,7 +86,7 @@ $ yarn run test:cov
 - Study of automatic deployment on Amazon EC2
 - Development of more backend features (Image deletion, thumbnail image, multiple upload...)
 - Development of a frontend for the project
-- Distribution of the service/modules following the in the future architecture document that is attached to the project (_./architecture-proposed.pdf_).
+- Distribution of the service/modules following the  in the future architecture document that is attached to the project (*./architecture-proposed.pdf*).
 
 ## Stay in touch
 
@@ -79,3 +95,4 @@ $ yarn run test:cov
 ## License
 
 Nest is [MIT licensed](LICENSE).
+```
