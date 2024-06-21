@@ -23,13 +23,19 @@ export class AuthService {
     if (findedUser) {
       return {
         newUser: false,
-        access_token: this.jwtService.sign({ name: username }),
+        access_token: this.jwtService.sign({
+          _id: findedUser._id,
+          name: findedUser.name,
+        }),
       };
     }
     const createtedUser = await this.usersService.create({ name: username });
     return {
       newUser: true,
-      access_token: this.jwtService.sign({ name: createtedUser.name }),
+      access_token: this.jwtService.sign({
+        _id: createtedUser._id,
+        name: createtedUser.name,
+      }),
     };
   }
 }
