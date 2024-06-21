@@ -64,9 +64,8 @@ $ yarn run test:cov
 ```
 
 # test coverage
-
+```bash
 $ yarn run test:cov
-
 ```
 
 ## API Test
@@ -95,4 +94,3 @@ $ yarn run test:cov
 ## License
 
 Nest is [MIT licensed](LICENSE).
-```
