@@ -1,10 +1,11 @@
 <p align="center" style="display: flex;  align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="80" alt="Nest Logo" /></a>
-  <a href="https://www.mongodb.com/" target="blank"><img src="https://webassets.mongodb.com/_com_assets/cms/mongodb_logo1-76twgcu2dm.png" width="120" alt="MongoDB Logo" /></a>
-  <a href="https://aws.amazon.com/s3/" target="blank"><img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" width="100" alt="Amazon S3 Logo" /></a>
-  <a href="https://www.docker.com/" target="blank"><img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="80" alt="Docker Logo" /></a>
-  <a href="https://docs.docker.com/compose/" target="blank"><img src="https://media.wiki-power.com/img/20210117130925.jpg" width="140" alt="Docker Compose Logo" /></a>
-  <a href="https://www.heroku.com/" target="blank"><img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" width="60" alt="Heroku Logo" /></a>
+  <a href="http://nestjs.com/" style="margin: 8px;" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="80" alt="Nest Logo" /></a>
+  <a href="https://www.mongodb.com/" style="margin: 8px;" target="blank"><img src="https://webassets.mongodb.com/_com_assets/cms/mongodb_logo1-76twgcu2dm.png" width="120" alt="MongoDB Logo" /></a>
+  <a href="https://aws.amazon.com/s3/" style="margin: 8px;" target="blank"><img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" width="100" alt="Amazon S3 Logo" /></a>
+  <a href="https://www.docker.com/" style="margin: 8px;" target="blank"><img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="80" alt="Docker Logo" /></a>
+  <a href="https://docs.docker.com/compose/" style="margin: 8px;" target="blank"><img src="https://media.wiki-power.com/img/20210117130925.jpg" width="140" alt="Docker Compose Logo" /></a>
+  <a href="https://www.heroku.com/" style="margin: 8px;" target="blank"><img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" width="60" alt="Heroku Logo" /></a>
+  <a href="https://sharp.pixelplumbing.com/" style="margin: 8px;" target="blank"><img src="https://cdn.jsdelivr.net/gh/lovell/sharp@main/docs/image/sharp-logo.svg" width="50" alt="Sharp - High performance Node.js image processing" /></a>
 </p>
 
 <p align="center">Some of the technologies and services used in this project.</p>
@@ -69,7 +70,7 @@ $ yarn run test:cov
 - Study of automatic deployment on Amazon EC2
 - Development of more backend features (Image deletion, thumbnail image, multiple upload...)
 - Development of a frontend for the project
-- Distribution of the service/modules following the architecture proposed in the future architecture document that is attached to the project.
+- Distribution of the service/modules following the in the future architecture document that is attached to the project (_./architecture-proposed.pdf_).
 
 ## Stay in touch
 
