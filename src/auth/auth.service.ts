@@ -18,17 +18,18 @@ export class AuthService {
     throw new UnauthorizedException('User not found');
   }
 
-  async login(user: User) {
-    const payload = { name: user.name };
-
-    const user = await this.usersService.getByName(user.name);
-    if (user) {
-      return user;
+  async login(username: string): Promise<any> {
+    const findedUser = await this.usersService.getByName(username);
+    if (findedUser) {
+      return {
+        newUser: false,
+        access_token: this.jwtService.sign({ name: username }),
+      };
     }
-    throw new UnauthorizedException('User not found');
-
+    const createtedUser = await this.usersService.create({ name: username });
     return {
-      access_token: this.jwtService.sign(payload),
+      newUser: true,
+      access_token: this.jwtService.sign({ name: createtedUser.name }),
     };
   }
 }

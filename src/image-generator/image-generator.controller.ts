@@ -1,12 +1,13 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
-Controller,
-Get,
-Inject,
-NotFoundException,
-Param,
-Query,
-Res,
+  Controller,
+  Get,
+  Inject,
+  NotFoundException,
+  Param,
+  Query,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
@@ -15,6 +16,7 @@ import { LocalStrategy } from '../local-strategy/local-strategy.service';
 import { TypeAcceptedFormat } from 'src/types/global.types';
 import { AwsS3Service } from '../aws-s3/aws-s3.service';
 import { ImageGeneratorService } from './image-generator.service';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('image-generator')
 export class ImageGeneratorController {
@@ -25,6 +27,7 @@ export class ImageGeneratorController {
     private readonly localStrategyService: LocalStrategy,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('images/:image')
   public async getImage(
     @Param('image') image: string,

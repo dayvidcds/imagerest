@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
-import { LocalAuthGuard } from './auth/auth.guard';
+import { JwtAuthGuard } from './auth/auth.guard';
 import { User } from './users/user';
 import { ExecutionContext } from '@nestjs/common';
 
@@ -29,7 +29,7 @@ describe('AppController', () => {
         },
       ],
     })
-      .overrideGuard(LocalAuthGuard)
+      .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: jest.fn((context: ExecutionContext) => {
           return true;
@@ -46,14 +46,11 @@ describe('AppController', () => {
     expect(appController).toBeDefined();
   });
 
-  describe('login', () => {
+  describe('find user', () => {
     it('should validate user and return the result', async () => {
-      const user = { name: 'test', email: 'test@test.com' } as User;
+      const user = { name: 'test' } as User;
       const result = await appController.login(user);
-      expect(authService.validateUser).toHaveBeenCalledWith(
-        user.name,
-        user.email,
-      );
+      expect(authService.findUserByName).toHaveBeenCalledWith(user.name);
       expect(result).toBe('validUser');
     });
   });
